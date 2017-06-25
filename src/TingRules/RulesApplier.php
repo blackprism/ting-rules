@@ -77,7 +77,7 @@ class RulesApplier
         return $hydrator;
     }
 
-    private function applyFinalize(CollectionInterface $collection): CollectionInterface
+    private function applyFinalize(CollectionInterface $collection)
     {
         foreach ($this->rules as $rule) {
             $collection = $rule->applyFinalizeRule($collection);

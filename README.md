@@ -91,7 +91,6 @@ class WithArticle extends AbstractRule
             return $result['article'];
         });
 
-
         $hydrator->callableFinalizeAggregate(function ($result, $articles) {
             $result['feed']->setArticles($articles);
             return $result['feed'];

@@ -18,7 +18,7 @@ abstract class AbstractRule implements Rule
         return $hydrator;
     }
 
-    public function applyFinalizeRule(CollectionInterface $collection): CollectionInterface
+    public function applyFinalizeRule(CollectionInterface $collection)
     {
         return $collection;
     }

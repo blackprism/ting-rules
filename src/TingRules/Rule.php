@@ -15,13 +15,36 @@ interface Rule
 
     public function getParameters(): array;
 
+    /**
+     * @param SelectInterface $queryBuilder
+     * @param string          $rule
+     * @param array           $parameters
+     *
+     * @throws \RuntimeException
+     *
+     * @return SelectInterface
+     */
     public function applyQueryRule(
         SelectInterface $queryBuilder,
         string $rule,
         array $parameters = []
     ): SelectInterface;
 
+    /**
+     * @param HydratorInterface $hydrator
+     *
+     * @throws \RuntimeException
+     *
+     * @return HydratorInterface
+     */
     public function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface;
 
-    public function applyFinalizeRule(CollectionInterface $collection): CollectionInterface;
+    /**
+     * @param CollectionInterface $collection
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    public function applyFinalizeRule(CollectionInterface $collection);
 }

@@ -1,0 +1,25 @@
+{
+    "name": "blackprism/ting-rules",
+    "description": "Ting Rules : a tiny rules system to build query",
+    "type": "library",
+    "license": "Apache-2.0",
+    "require": {
+        "php": ">=5.5",
+        "ccmbenchmark/ting": "^3.3",
+        "aura/sqlquery": "^2.6"
+    },
+    "require-dev": {
+        "atoum/atoum": "^2.8",
+        "atoum/stubs": "^2.2"
+    },
+    "autoload": {
+        "psr-4" : {
+            "Blackprism\\TingRules\\": "src/TingRules/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\fixtures\\": "tests/fixtures/"
+        }
+    }
+}

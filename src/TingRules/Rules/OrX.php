@@ -15,7 +15,7 @@ class OrX extends AbstractRule
         $this->rules[] = $rule;
     }
 
-    public function or(Rule $orOtherRule)
+    public function orRule(Rule $orOtherRule)
     {
         $this->rules[] = $orOtherRule;
 

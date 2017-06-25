@@ -31,18 +31,6 @@ class RulesApplier
     }
 
     /**
-     * @param array $rules
-     *
-     * @return $this
-     */
-    public function rules(array $rules)
-    {
-        $this->rules = $rules;
-
-        return $this;
-    }
-
-    /**
      * @param Rule $rule
      * @param string $identifier
      *
@@ -96,11 +84,34 @@ class RulesApplier
         return $columns;
     }
 
-    private function buildQueryFromSelect(SelectInterface $select): Query
+    private function getQueryForSelect(SelectInterface $select)
     {
         return $this->repository
-            ->getQuery($select->getStatement())
-            ->setParams($select->getBindValues());
+            ->getQuery($select->getStatement());
+    }
+
+    private function buildQueryFromSelect(SelectInterface $select): Query
+    {
+        return $this->getQueryForSelect($select)->setParams($select->getBindValues());
+    }
+
+    private function getHydrator(HydratorInterface $hydrator = null): HydratorInterface
+    {
+        if ($hydrator !== null) {
+            return $hydrator;
+        }
+
+        $hydrator = new HydratorAggregator();
+
+        $hydrator->callableIdIs(function ($result) {
+            return mt_rand();
+        });
+
+        $hydrator->callableDataIs(function ($result) {
+            return $result;
+        });
+
+        return $hydrator;
     }
 
     /**
@@ -114,16 +125,7 @@ class RulesApplier
     public function apply(HydratorInterface $hydrator = null)
     {
         $metadata = $this->repository->getMetadata();
-
-        if ($hydrator === null) {
-            $hydrator = new HydratorAggregator();
-            $hydrator->callableIdIs(function ($result) {
-                return mt_rand();
-            });
-            $hydrator->callableDataIs(function ($result) {
-                return $result;
-            });
-        }
+        $hydrator = $this->getHydrator($hydrator);
 
         /** @var SelectInterface $select */
         $select = $this->repository->getQueryBuilder(Repository::QUERY_SELECT);
@@ -136,10 +138,7 @@ class RulesApplier
         }
 
         $hydrator = $this->applyHydrators($hydrator);
-
-        $collection = $this
-            ->buildQueryFromSelect($select)
-            ->query($this->repository->getCollection($hydrator));
+        $collection = $this->buildQueryFromSelect($select)->query($this->repository->getCollection($hydrator));
 
         return $this->applyFinalize($collection);
     }

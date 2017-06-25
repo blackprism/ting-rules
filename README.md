@@ -13,6 +13,7 @@ namespace AppBundle\Domain\Feed\Rules;
 
 use Aura\SqlQuery\Common\SelectInterface;
 use Blackprism\TingRules\AbstractRule;
+use CCMBenchmark\Ting\Repository\Metadata;
 
 class IsEnabled extends AbstractRule
 {
@@ -26,8 +27,12 @@ class IsEnabled extends AbstractRule
         return [];
     }
 
-    public function applyQueryRule(SelectInterface $queryBuilder, string $rule, array $parameters = []): SelectInterface
-    {
+    public function applyQueryRule(
+        SelectInterface $queryBuilder,
+        Metadata $metadata,
+        string $rule,
+        array $parameters = []
+    ): SelectInterface {
         return $queryBuilder
             ->where($rule)
             ->bindValues($parameters);
@@ -52,10 +57,10 @@ $feeds = $rulesApplier->apply();
 namespace AppBundle\Domain\Feed\Rules;
 
 use Aura\SqlQuery\Common\SelectInterface;
-use CCMBenchmark\Ting\Repository\CollectionInterface;
 use CCMBenchmark\Ting\Repository\HydratorAggregator;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
 use Blackprism\TingRules\AbstractRule;
+use CCMBenchmark\Ting\Repository\Metadata;
 
 class WithArticle extends AbstractRule
 {
@@ -69,8 +74,12 @@ class WithArticle extends AbstractRule
         return [];
     }
 
-    public function applyQueryRule(SelectInterface $queryBuilder, string $rule, array $parameters = []): SelectInterface
-    {
+    public function applyQueryRule(
+        SelectInterface $queryBuilder,
+        Metadata $metadata,
+        string $rule,
+        array $parameters = []
+    ): SelectInterface {
         return $queryBuilder
             ->cols(['*'])
             ->leftJoin('article', 'feed.id = article.feed_id');
@@ -79,7 +88,9 @@ class WithArticle extends AbstractRule
     public function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface
     {
         if ($hydrator instanceof HydratorAggregator === false) {
-            throw new \RuntimeException("Can't apply " . self::class . " rule because Hydrator is not instance of HydratorAggregator");
+            throw new \RuntimeException(
+                "Can't apply " . self::class . " rule because Hydrator is not instance of HydratorAggregator"
+            );
         }
 
         /** @var HydratorAggregator $hydrator */
@@ -97,11 +108,6 @@ class WithArticle extends AbstractRule
         });
 
         return $hydrator;
-    }
-
-    public function applyFinalizeRule(CollectionInterface $collection): CollectionInterface
-    {
-        return $collection->first();
     }
 }
 ```

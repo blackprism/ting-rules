@@ -5,6 +5,7 @@ namespace Blackprism\TingRules;
 use Aura\SqlQuery\Common\SelectInterface;
 use CCMBenchmark\Ting\Repository\CollectionInterface;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
+use CCMBenchmark\Ting\Repository\Metadata;
 
 interface Rule
 {
@@ -17,6 +18,7 @@ interface Rule
 
     /**
      * @param SelectInterface $queryBuilder
+     * @param Metadata        $metadata
      * @param string          $rule
      * @param array           $parameters
      *
@@ -26,6 +28,7 @@ interface Rule
      */
     public function applyQueryRule(
         SelectInterface $queryBuilder,
+        Metadata $metadata,
         string $rule,
         array $parameters = []
     ): SelectInterface;
@@ -46,5 +49,5 @@ interface Rule
      *
      * @return mixed
      */
-    public function applyFinalizeRule(CollectionInterface $collection);
+    public function applyCollectionRule(CollectionInterface $collection): CollectionInterface;
 }

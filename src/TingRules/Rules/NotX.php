@@ -5,6 +5,7 @@ namespace Blackprism\TingRules\Rules;
 use Aura\SqlQuery\Common\SelectInterface;
 use Blackprism\TingRules\AbstractRule;
 use Blackprism\TingRules\Rule;
+use CCMBenchmark\Ting\Repository\Metadata;
 
 class NotX extends AbstractRule
 {
@@ -25,8 +26,12 @@ class NotX extends AbstractRule
         return [];
     }
 
-    public function applyQueryRule(SelectInterface $queryBuilder, string $rule, array $parameters = []): SelectInterface
-    {
-        return $this->ruleToNegate->applyQueryRule($queryBuilder, $rule, $parameters);
+    public function applyQueryRule(
+        SelectInterface $queryBuilder,
+        Metadata $metadata,
+        string $rule,
+        array $parameters = []
+    ): SelectInterface {
+        return $this->ruleToNegate->applyQueryRule($queryBuilder, $metadata, $rule, $parameters);
     }
 }

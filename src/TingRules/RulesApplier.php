@@ -47,16 +47,16 @@ class RulesApplier
         return $this;
     }
 
-    private function applyQueryRules(SelectInterface $queryBuilder): SelectInterface
+    private function applyQueryRule(SelectInterface $queryBuilder, Metadata $metadata): SelectInterface
     {
         foreach ($this->rules as $rule) {
-            $queryBuilder = $rule->applyQueryRule($queryBuilder, $rule->getRule(), $rule->getParameters());
+            $queryBuilder = $rule->applyQueryRule($queryBuilder, $metadata, $rule->getRule(), $rule->getParameters());
         }
 
         return $queryBuilder;
     }
 
-    private function applyHydrators(HydratorInterface $hydrator): HydratorInterface
+    private function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface
     {
         foreach ($this->rules as $rule) {
             $hydrator = $rule->applyHydratorRule($hydrator);
@@ -65,10 +65,10 @@ class RulesApplier
         return $hydrator;
     }
 
-    private function applyFinalize(CollectionInterface $collection)
+    private function applyCollectionRule(CollectionInterface $collection)
     {
         foreach ($this->rules as $rule) {
-            $collection = $rule->applyFinalizeRule($collection);
+            $collection = $rule->applyCollectionRule($collection);
         }
 
         return $collection;
@@ -131,15 +131,15 @@ class RulesApplier
         $select = $this->repository->getQueryBuilder(Repository::QUERY_SELECT);
         $select->from($metadata->getTable());
 
-        $select = $this->applyQueryRules($select);
+        $select = $this->applyQueryRule($select, $metadata);
 
         if ($select instanceof Select && $select->hasCols() === false) {
             $select->cols($this->getColumns($metadata));
         }
 
-        $hydrator = $this->applyHydrators($hydrator);
+        $hydrator = $this->applyHydratorRule($hydrator);
         $collection = $this->buildQueryFromSelect($select)->query($this->repository->getCollection($hydrator));
 
-        return $this->applyFinalize($collection);
+        return $this->applyCollectionRule($collection);
     }
 }

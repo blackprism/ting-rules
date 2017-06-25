@@ -5,11 +5,16 @@ namespace Blackprism\TingRules;
 use Aura\SqlQuery\Common\SelectInterface;
 use CCMBenchmark\Ting\Repository\CollectionInterface;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
+use CCMBenchmark\Ting\Repository\Metadata;
 
 abstract class AbstractRule implements Rule
 {
-    public function applyQueryRule(SelectInterface $queryBuilder, string $rule, array $parameters = []): SelectInterface
-    {
+    public function applyQueryRule(
+        SelectInterface $queryBuilder,
+        Metadata $metadata,
+        string $rule,
+        array $parameters = []
+    ): SelectInterface {
         return $queryBuilder;
     }
 
@@ -18,7 +23,7 @@ abstract class AbstractRule implements Rule
         return $hydrator;
     }
 
-    public function applyFinalizeRule(CollectionInterface $collection)
+    public function applyCollectionRule(CollectionInterface $collection): CollectionInterface
     {
         return $collection;
     }

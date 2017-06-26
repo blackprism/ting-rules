@@ -2,7 +2,7 @@
 
 namespace Blackprism\TingRules;
 
-use Aura\SqlQuery\Common\SelectInterface;
+use Aura\SqlQuery\Common\Select;
 use CCMBenchmark\Ting\Repository\CollectionInterface;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
 use CCMBenchmark\Ting\Repository\Metadata;
@@ -17,21 +17,21 @@ interface Rule
     public function getParameters(): array;
 
     /**
-     * @param SelectInterface $queryBuilder
-     * @param Metadata        $metadata
-     * @param string          $rule
-     * @param array           $parameters
+     * @param Select   $queryBuilder
+     * @param Metadata $metadata
+     * @param string   $rule
+     * @param array    $parameters
      *
      * @throws \RuntimeException
      *
-     * @return SelectInterface
+     * @return Select
      */
     public function applyQueryRule(
-        SelectInterface $queryBuilder,
+        Select $queryBuilder,
         Metadata $metadata,
-        string $rule,
+        $rule,
         array $parameters = []
-    ): SelectInterface;
+    ): Select;
 
     /**
      * @param HydratorInterface $hydrator

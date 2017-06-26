@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Blackprism TingRules" default="all">
+    <property name="fullpath" value="./" />
+    <resolvepath propertyName="fullpath" file="${fullpath}" />
+
+    <target name="all">
+        <phingcall target="phpcs" />
+        <phingcall target="phplint" />
+        <phingcall target="phpmd" />
+        <!--<phingcall target="test" />-->
+    </target>
+
+    <target name="phpcs">
+        <exec
+            command="./bin/phpcs --standard='PSR2,vendor/object-calisthenics/phpcs-calisthenics-rules/src/ObjectCalisthenics/ruleset.xml' src/"
+            passthru="true"
+        />
+    </target>
+
+    <target name="phplint">
+        <phplint haltonfailure="true">
+            <fileset dir="src">
+                <include name="**/*.php" />
+            </fileset>
+        </phplint>
+    </target>
+
+    <target name="phpmd">
+        <phpmd rulesets="codesize,unusedcode,naming,cleancode,controversial">
+            <fileset dir="src">
+                <include name="**/*.php" />
+            </fileset>
+        </phpmd>
+    </target>
+
+    <target name="phpcpd">
+        <phpcpd>
+            <fileset dir="src/Blackprism/CouchbaseODM">
+                <include name="**/*.php" />
+            </fileset>
+        </phpcpd>
+    </target>
+</project>

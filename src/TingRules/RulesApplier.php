@@ -3,7 +3,6 @@
 namespace Blackprism\TingRules;
 
 use Aura\SqlQuery\Common\Select;
-use Aura\SqlQuery\Common\SelectInterface;
 use CCMBenchmark\Ting\Exception;
 use CCMBenchmark\Ting\Query\Query;
 use CCMBenchmark\Ting\Query\QueryException;
@@ -47,7 +46,7 @@ class RulesApplier
         return $this;
     }
 
-    private function applyQueryRule(SelectInterface $queryBuilder, Metadata $metadata): SelectInterface
+    private function applyQueryRule(Select $queryBuilder, Metadata $metadata): Select
     {
         foreach ($this->rules as $rule) {
             $queryBuilder = $rule->applyQueryRule($queryBuilder, $metadata, $rule->getRule(), $rule->getParameters());
@@ -84,13 +83,13 @@ class RulesApplier
         return $columns;
     }
 
-    private function getQueryForSelect(SelectInterface $select)
+    private function getQueryForSelect(Select $select)
     {
         return $this->repository
             ->getQuery($select->getStatement());
     }
 
-    private function buildQueryFromSelect(SelectInterface $select): Query
+    private function buildQueryFromSelect(Select $select): Query
     {
         return $this->getQueryForSelect($select)->setParams($select->getBindValues());
     }
@@ -127,7 +126,7 @@ class RulesApplier
         $metadata = $this->repository->getMetadata();
         $hydrator = $this->getHydrator($hydrator);
 
-        /** @var SelectInterface $select */
+        /** @var Select $select */
         $select = $this->repository->getQueryBuilder(Repository::QUERY_SELECT);
         $select->from($metadata->getTable());
 

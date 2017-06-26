@@ -2,7 +2,7 @@
 
 namespace Blackprism\TingRules;
 
-use Aura\SqlQuery\Common\SelectInterface;
+use Aura\SqlQuery\Common\Select;
 use CCMBenchmark\Ting\Repository\CollectionInterface;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
 use CCMBenchmark\Ting\Repository\Metadata;
@@ -10,11 +10,11 @@ use CCMBenchmark\Ting\Repository\Metadata;
 abstract class AbstractRule implements Rule
 {
     public function applyQueryRule(
-        SelectInterface $queryBuilder,
+        Select $queryBuilder,
         Metadata $metadata,
-        string $rule,
+        $rule,
         array $parameters = []
-    ): SelectInterface {
+    ): Select {
         return $queryBuilder;
     }
 

@@ -26,7 +26,10 @@ class OrX extends AbstractRule
         return $this;
     }
 
-    public function getRule(): string
+    /**
+     * @return string
+     */
+    public function getRule()
     {
         $rules = array_map(
             function ($rule) {

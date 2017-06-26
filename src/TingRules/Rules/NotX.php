@@ -16,7 +16,10 @@ class NotX extends AbstractRule
         $this->ruleToNegate = $ruleToNegate;
     }
 
-    public function getRule(): string
+    /**
+     * @return string
+     */
+    public function getRule()
     {
         return 'NOT (' . $this->ruleToNegate->getRule() . ')';
     }

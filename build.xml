@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Blackprism CouchbaseODM" default="all">
+    <!--<taskdef name="atoum" classpath="./vendor/atoum/atoum/resources/phing/" classname="AtoumTask"/>-->
+
+    <property name="fullpath" value="./" />
+    <resolvepath propertyName="fullpath" file="${fullpath}" />
+
+    <target name="all">
+        <phingcall target="phpcs" />
+        <phingcall target="phplint" />
+        <phingcall target="phpmd" />
+        <!--<phingcall target="test" />-->
+    </target>
+
+    <target name="phpcs">
+        <autoloader autoloaderpath="./vendor/squizlabs/php_codesniffer/autoload.php" />
+
+        <phpcodesniffer
+                standard="PSR2"
+                showSniffs="true"
+                showWarnings="true"
+                format="full"
+                haltonerror="true"
+                haltonwarning="true">
+            <fileset dir="src/Blackprism/CouchbaseODM">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="full" outfile="php://stdout" />
+        </phpcodesniffer>
+    </target>
+
+    <target name="phplint">
+        <phplint haltonfailure="true">
+            <fileset dir="src/Blackprism/CouchbaseODM">
+                <include name="**/*.php" />
+            </fileset>
+        </phplint>
+    </target>
+
+    <target name="phpmd">
+        <phpmd rulesets="codesize,unusedcode,naming,cleancode,controversial">
+            <fileset dir="src/Blackprism/CouchbaseODM">
+                <include name="**/*.php" />
+            </fileset>
+        </phpmd>
+    </target>
+
+    <target name="phpcpd">
+        <phpcpd>
+            <fileset dir="src/Blackprism/CouchbaseODM">
+                <include name="**/*.php" />
+            </fileset>
+        </phpcpd>
+    </target>
+
+    <!--<target name="test">
+        <atoum
+                atoumpharpath="./vendor/bin/atoum"
+                bootstrap="./vendor/autoload.php"
+                codecoverage="true"
+                codecoveragereportextensionpath="./tests/coverage/"
+                codecoveragereportextensionurl="file://${fullpath}/tests/coverage/index.html"
+                showcodecoverage="true"
+                showmissingcodecoverage="true"
+                showprogress="true"
+                showmemory="true"
+                showduration="true">
+            <fileset dir="./tests/units">
+                <include name="**/*.php" />
+            </fileset>
+        </atoum>
+    </target>-->
+</project>

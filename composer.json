@@ -3,6 +3,9 @@
     "description": "Ting Rules : a tiny rules system to build query",
     "type": "library",
     "license": "Apache-2.0",
+    "config": {
+        "bin-dir": "bin"
+    },
     "require": {
         "php": ">=5.5",
         "ccmbenchmark/ting": "^3.3",
@@ -11,7 +14,8 @@
     "require-dev": {
         "atoum/atoum": "^2.8",
         "atoum/stubs": "^2.2",
-        "object-calisthenics/phpcs-calisthenics-rules": "^3.0"
+        "object-calisthenics/phpcs-calisthenics-rules": "^3.0",
+        "phing/phing": "^2.16"
     },
     "autoload": {
         "psr-4" : {

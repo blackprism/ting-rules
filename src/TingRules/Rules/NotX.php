@@ -9,8 +9,14 @@ use CCMBenchmark\Ting\Repository\Metadata;
 
 class NotX extends AbstractRule
 {
+    /**
+     * @var Rule
+     */
     private $ruleToNegate;
 
+    /**
+     * @param Rule $ruleToNegate
+     */
     public function __construct(Rule $ruleToNegate)
     {
         $this->ruleToNegate = $ruleToNegate;
@@ -24,11 +30,25 @@ class NotX extends AbstractRule
         return 'NOT (' . $this->ruleToNegate->getRule() . ')';
     }
 
+    /**
+     *
+     * @return array
+     */
     public function getParameters(): array
     {
         return [];
     }
 
+    /**
+     * @param Select   $queryBuilder
+     * @param Metadata $metadata
+     * @param string   $rule
+     * @param array    $parameters
+     *
+     * @throws \RuntimeException
+     *
+     * @return Select
+     */
     public function applyQueryRule(
         Select $queryBuilder,
         Metadata $metadata,

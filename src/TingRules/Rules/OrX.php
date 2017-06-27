@@ -14,11 +14,19 @@ class OrX extends AbstractRule
      */
     private $rules = [];
 
+    /**
+     * @param Rule $rule
+     */
     public function __construct(Rule $rule)
     {
         $this->rules[] = $rule;
     }
 
+    /**
+     * @param Rule $orOtherRule
+     *
+     * @return $this
+     */
     public function orRule(Rule $orOtherRule)
     {
         $this->rules[] = $orOtherRule;
@@ -32,6 +40,7 @@ class OrX extends AbstractRule
     public function getRule()
     {
         $rules = array_map(
+            /** @return string */
             function ($rule) {
                 /** @var Rule $rule */
                 return $rule->getRule();
@@ -41,11 +50,24 @@ class OrX extends AbstractRule
         return '(' . implode(') OR (', $rules) . ')';
     }
 
+    /**
+     * @return array
+     */
     public function getParameters(): array
     {
         return [];
     }
 
+    /**
+     * @param Select   $queryBuilder
+     * @param Metadata $metadata
+     * @param string   $rule
+     * @param array    $parameters
+     *
+     * @throws \RuntimeException
+     *
+     * @return Select
+     */
     public function applyQueryRule(
         Select $queryBuilder,
         Metadata $metadata,

@@ -3,9 +3,7 @@
 namespace Blackprism\TingRules;
 
 use Aura\SqlQuery\Common\Select;
-use CCMBenchmark\Ting\Exception;
 use CCMBenchmark\Ting\Query\Query;
-use CCMBenchmark\Ting\Query\QueryException;
 use CCMBenchmark\Ting\Repository\CollectionInterface;
 use CCMBenchmark\Ting\Repository\HydratorAggregator;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
@@ -20,10 +18,13 @@ class RulesApplier
     private $repository;
 
     /**
-     * @var array
+     * @var array<int, Rule>
      */
     private $rules = [];
 
+    /**
+     * @param Repository $repository
+     */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
@@ -31,14 +32,14 @@ class RulesApplier
 
     /**
      * @param Rule $rule
-     * @param string $identifier
+     * @param int  $index
      *
      * @return $this
      */
-    public function rule(Rule $rule, $identifier = null)
+    public function rule(Rule $rule, $index = null)
     {
-        if ($identifier !== null) {
-            $this->rules[$identifier] = $rule;
+        if ($index !== null) {
+            $this->rules[(int) $index] = $rule;
             return $this;
         }
 
@@ -46,8 +47,17 @@ class RulesApplier
         return $this;
     }
 
+    /**
+     * @param Select   $queryBuilder
+     * @param Metadata $metadata
+     *
+     * @throws \RuntimeException
+     *
+     * @return Select
+     */
     private function applyQueryRule(Select $queryBuilder, Metadata $metadata): Select
     {
+        /** @var Rule $rule */
         foreach ($this->rules as $rule) {
             $queryBuilder = $rule->applyQueryRule($queryBuilder, $metadata, $rule->getRule(), $rule->getParameters());
         }
@@ -55,8 +65,16 @@ class RulesApplier
         return $queryBuilder;
     }
 
+    /**
+     * @param HydratorInterface $hydrator
+     *
+     * @throws \RuntimeException
+     *
+     * @return HydratorInterface
+     */
     private function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface
     {
+        /** @var Rule $rule */
         foreach ($this->rules as $rule) {
             $hydrator = $rule->applyHydratorRule($hydrator);
         }
@@ -64,8 +82,16 @@ class RulesApplier
         return $hydrator;
     }
 
+    /**
+     * @param CollectionInterface $collection
+     *
+     * @throws \RuntimeException
+     *
+     * @return CollectionInterface
+     */
     private function applyCollectionRule(CollectionInterface $collection)
     {
+        /** @var Rule $rule */
         foreach ($this->rules as $rule) {
             $collection = $rule->applyCollectionRule($collection);
         }
@@ -73,27 +99,48 @@ class RulesApplier
         return $collection;
     }
 
+    /**
+     * @param Metadata $metadata
+     *
+     * @return string[int]
+     */
     private function getColumns(Metadata $metadata): array
     {
         $columns = [];
+
+        /** @var array $field */
         foreach ($metadata->getFields() as $field) {
-            $columns[] = $field['columnName'];
+            $columns[] = (string) $field['columnName'];
         }
 
         return $columns;
     }
 
+    /**
+     * @param Select $select
+     *
+     * @return Query
+     */
     private function getQueryForSelect(Select $select)
     {
-        return $this->repository
-            ->getQuery($select->getStatement());
+        return $this->repository->getQuery($select->getStatement());
     }
 
+    /**
+     * @param Select $select
+     *
+     * @return Query
+     */
     private function buildQueryFromSelect(Select $select): Query
     {
         return $this->getQueryForSelect($select)->setParams($select->getBindValues());
     }
 
+    /**
+     * @param HydratorInterface|null $hydrator
+     *
+     * @return HydratorInterface
+     */
     private function getHydrator(HydratorInterface $hydrator = null): HydratorInterface
     {
         if ($hydrator !== null) {
@@ -102,26 +149,31 @@ class RulesApplier
 
         $hydrator = new HydratorAggregator();
 
-        $hydrator->callableIdIs(function ($result) {
-            return mt_rand();
-        });
+        $hydrator->callableIdIs(
+            /** @return string */
+            function () {
+                return (string) mt_rand();
+            }
+        );
 
-        $hydrator->callableDataIs(function ($result) {
-            return $result;
-        });
+        $hydrator->callableDataIs(
+            /** @return mixed */
+            function ($result) {
+                return $result;
+            }
+        );
 
         return $hydrator;
     }
 
     /**
-     * @param HydratorInterface $hydrator
+     * @param HydratorInterface|null $hydrator
      *
-     * @throws Exception
-     * @throws QueryException
+     * @throws \RuntimeException
      *
-     * @return mixed
+     * @return CollectionInterface
      */
-    public function apply(HydratorInterface $hydrator = null)
+    public function apply(HydratorInterface $hydrator = null): CollectionInterface
     {
         $metadata = $this->repository->getMetadata();
         $hydrator = $this->getHydrator($hydrator);

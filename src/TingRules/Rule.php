@@ -14,6 +14,9 @@ interface Rule
      */
     public function getRule();
 
+    /**
+     * @return array
+     */
     public function getParameters(): array;
 
     /**
@@ -47,7 +50,7 @@ interface Rule
      *
      * @throws \RuntimeException
      *
-     * @return mixed
+     * @return CollectionInterface
      */
     public function applyCollectionRule(CollectionInterface $collection): CollectionInterface;
 }

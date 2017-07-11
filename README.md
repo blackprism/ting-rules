@@ -17,12 +17,12 @@ use CCMBenchmark\Ting\Repository\Metadata;
 
 class IsEnabled extends AbstractRule
 {
-    public function getRule(): string
+    public function getRule()
     {
         return "feed.enabled = '1'";
     }
 
-    public function getParameters(): array
+    public function getParameters()
     {
         return [];
     }
@@ -56,7 +56,7 @@ $feeds = $rulesApplier->apply();
 
 namespace AppBundle\Domain\Feed\Rules;
 
-use Aura\SqlQuery\Common\SelectInterface;
+use Aura\SqlQuery\Common\Select;
 use CCMBenchmark\Ting\Repository\HydratorAggregator;
 use CCMBenchmark\Ting\Repository\HydratorInterface;
 use Blackprism\TingRules\AbstractRule;
@@ -64,28 +64,28 @@ use CCMBenchmark\Ting\Repository\Metadata;
 
 class WithArticle extends AbstractRule
 {
-    public function getRule(): string
+    public function getRule()
     {
         return '';
     }
 
-    public function getParameters(): array
+    public function getParameters()
     {
         return [];
     }
 
     public function applyQueryRule(
-        SelectInterface $queryBuilder,
+        Select $queryBuilder,
         Metadata $metadata,
         $rule,
         array $parameters = []
-    ): SelectInterface {
+    ) {
         return $queryBuilder
             ->cols(['*'])
             ->leftJoin('article', 'feed.id = article.feed_id');
     }
 
-    public function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface
+    public function applyHydratorRule(HydratorInterface $hydrator)
     {
         if ($hydrator instanceof HydratorAggregator === false) {
             throw new \RuntimeException(

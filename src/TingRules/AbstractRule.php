@@ -17,12 +17,8 @@ abstract class AbstractRule implements Rule
      *
      * @return Select
      */
-    public function applyQueryRule(
-        Select $queryBuilder,
-        Metadata $metadata,
-        $rule,
-        array $parameters = []
-    ): Select {
+    public function applyQueryRule(Select $queryBuilder, Metadata $metadata, $rule, array $parameters = [])
+    {
         return $queryBuilder;
     }
 
@@ -31,7 +27,7 @@ abstract class AbstractRule implements Rule
      *
      * @return HydratorInterface
      */
-    public function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface
+    public function applyHydratorRule(HydratorInterface $hydrator)
     {
         return $hydrator;
     }
@@ -41,7 +37,7 @@ abstract class AbstractRule implements Rule
      *
      * @return CollectionInterface
      */
-    public function applyCollectionRule(CollectionInterface $collection): CollectionInterface
+    public function applyCollectionRule(CollectionInterface $collection)
     {
         return $collection;
     }

@@ -34,7 +34,7 @@ class NotX extends AbstractRule
      *
      * @return array
      */
-    public function getParameters(): array
+    public function getParameters()
     {
         return [];
     }
@@ -49,12 +49,8 @@ class NotX extends AbstractRule
      *
      * @return Select
      */
-    public function applyQueryRule(
-        Select $queryBuilder,
-        Metadata $metadata,
-        $rule,
-        array $parameters = []
-    ): Select {
+    public function applyQueryRule(Select $queryBuilder, Metadata $metadata, $rule, array $parameters = [])
+    {
         return $this->ruleToNegate->applyQueryRule($queryBuilder, $metadata, $rule, $parameters);
     }
 }

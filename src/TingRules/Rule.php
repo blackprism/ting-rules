@@ -17,7 +17,7 @@ interface Rule
     /**
      * @return array
      */
-    public function getParameters(): array;
+    public function getParameters();
 
     /**
      * @param Select   $queryBuilder
@@ -29,12 +29,7 @@ interface Rule
      *
      * @return Select
      */
-    public function applyQueryRule(
-        Select $queryBuilder,
-        Metadata $metadata,
-        $rule,
-        array $parameters = []
-    ): Select;
+    public function applyQueryRule(Select $queryBuilder, Metadata $metadata, $rule, array $parameters = []);
 
     /**
      * @param HydratorInterface $hydrator
@@ -43,7 +38,7 @@ interface Rule
      *
      * @return HydratorInterface
      */
-    public function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface;
+    public function applyHydratorRule(HydratorInterface $hydrator);
 
     /**
      * @param CollectionInterface $collection
@@ -52,5 +47,5 @@ interface Rule
      *
      * @return CollectionInterface
      */
-    public function applyCollectionRule(CollectionInterface $collection): CollectionInterface;
+    public function applyCollectionRule(CollectionInterface $collection);
 }

@@ -7,14 +7,24 @@
         <phingcall target="phpcs" />
         <phingcall target="phplint" />
         <phingcall target="phpmd" />
+        <phingcall target="phpstan" />
+        <phingcall target="psalm" />
         <!--<phingcall target="test" />-->
     </target>
 
     <target name="phpcs">
         <exec
-            command="./bin/phpcs --standard='PSR2,vendor/object-calisthenics/phpcs-calisthenics-rules/src/ObjectCalisthenics/ruleset.xml' src/"
+            command="./bin/phpcs --colors --standard='PSR2,vendor/object-calisthenics/phpcs-calisthenics-rules/src/ObjectCalisthenics/ruleset.xml' src/"
             passthru="true"
         />
+    </target>
+
+    <target name="phpstan">
+        <exec command="./bin/phpstan analyze --ansi --level 3 src/" passthru="true" />
+    </target>
+
+    <target name="psalm">
+        <exec command="./bin/psalm" passthru="true" />
     </target>
 
     <target name="phplint">

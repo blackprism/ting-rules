@@ -55,7 +55,7 @@ class RulesApplier
      *
      * @return Select
      */
-    private function applyQueryRule(Select $queryBuilder, Metadata $metadata): Select
+    private function applyQueryRule(Select $queryBuilder, Metadata $metadata)
     {
         /** @var Rule $rule */
         foreach ($this->rules as $rule) {
@@ -72,7 +72,7 @@ class RulesApplier
      *
      * @return HydratorInterface
      */
-    private function applyHydratorRule(HydratorInterface $hydrator): HydratorInterface
+    private function applyHydratorRule(HydratorInterface $hydrator)
     {
         /** @var Rule $rule */
         foreach ($this->rules as $rule) {
@@ -102,9 +102,9 @@ class RulesApplier
     /**
      * @param Metadata $metadata
      *
-     * @return string[int]
+     * @return array<int, string>
      */
-    private function getColumns(Metadata $metadata): array
+    private function getColumns(Metadata $metadata)
     {
         $columns = [];
 
@@ -127,43 +127,41 @@ class RulesApplier
     }
 
     /**
-     * @param Select $select
-     *
-     * @return Query
-     */
-    private function buildQueryFromSelect(Select $select): Query
-    {
-        return $this->getQueryForSelect($select)->setParams($select->getBindValues());
-    }
-
-    /**
      * @param HydratorInterface|null $hydrator
      *
      * @return HydratorInterface
      */
-    private function getHydrator(HydratorInterface $hydrator = null): HydratorInterface
+    private function getHydrator(HydratorInterface $hydrator = null)
     {
         if ($hydrator !== null) {
             return $hydrator;
         }
 
-        $hydrator = new HydratorAggregator();
+        return $this->initHydratorAggregatorForNoAggregation(new HydratorAggregator());
+    }
 
-        $hydrator->callableIdIs(
+    /**
+     * @param HydratorAggregator $hydratorAggregator
+     *
+     * @return HydratorAggregator
+     */
+    private function initHydratorAggregatorForNoAggregation(HydratorAggregator $hydratorAggregator)
+    {
+        $hydratorAggregator->callableIdIs(
             /** @return string */
             function () {
                 return (string) mt_rand();
             }
         );
 
-        $hydrator->callableDataIs(
+        $hydratorAggregator->callableDataIs(
             /** @return mixed */
             function ($result) {
                 return $result;
             }
         );
 
-        return $hydrator;
+        return $hydratorAggregator;
     }
 
     /**
@@ -173,7 +171,7 @@ class RulesApplier
      *
      * @return CollectionInterface
      */
-    public function apply(HydratorInterface $hydrator = null): CollectionInterface
+    public function apply(HydratorInterface $hydrator = null)
     {
         $metadata = $this->repository->getMetadata();
         $hydrator = $this->getHydrator($hydrator);
@@ -189,7 +187,9 @@ class RulesApplier
         }
 
         $hydrator = $this->applyHydratorRule($hydrator);
-        $collection = $this->buildQueryFromSelect($select)->query($this->repository->getCollection($hydrator));
+
+        $query = $this->getQueryForSelect($select)->setParams($select->getBindValues());
+        $collection = $query->query($this->repository->getCollection($hydrator));
 
         return $this->applyCollectionRule($collection);
     }

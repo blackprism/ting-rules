@@ -53,7 +53,7 @@ class OrX extends AbstractRule
     /**
      * @return array
      */
-    public function getParameters(): array
+    public function getParameters()
     {
         return [];
     }
@@ -68,12 +68,8 @@ class OrX extends AbstractRule
      *
      * @return Select
      */
-    public function applyQueryRule(
-        Select $queryBuilder,
-        Metadata $metadata,
-        $rule,
-        array $parameters = []
-    ): Select {
+    public function applyQueryRule(Select $queryBuilder, Metadata $metadata, $rule, array $parameters = [])
+    {
         return $this->rules[0]->applyQueryRule($queryBuilder, $metadata, $rule, $parameters);
     }
 }

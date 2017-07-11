@@ -11,7 +11,7 @@ Still in progress. You SHOULD NOT use this package until release 1.0.
 
 namespace AppBundle\Domain\Feed\Rules;
 
-use Aura\SqlQuery\Common\SelectInterface;
+use Aura\SqlQuery\Common\Select;
 use Blackprism\TingRules\AbstractRule;
 use CCMBenchmark\Ting\Repository\Metadata;
 
@@ -28,11 +28,11 @@ class IsEnabled extends AbstractRule
     }
 
     public function applyQueryRule(
-        SelectInterface $queryBuilder,
+        Select $queryBuilder,
         Metadata $metadata,
-        string $rule,
+        $rule,
         array $parameters = []
-    ): SelectInterface {
+    ) {
         return $queryBuilder
             ->where($rule)
             ->bindValues($parameters);
@@ -77,7 +77,7 @@ class WithArticle extends AbstractRule
     public function applyQueryRule(
         SelectInterface $queryBuilder,
         Metadata $metadata,
-        string $rule,
+        $rule,
         array $parameters = []
     ): SelectInterface {
         return $queryBuilder

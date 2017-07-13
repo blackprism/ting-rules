@@ -15,12 +15,12 @@
         "ext-xdebug": "^2.2",
         "atoum/atoum": "3.0",
         "atoum/stubs": "^2.2",
+        "atoum/reports-extension": "dev-master",
         "object-calisthenics/phpcs-calisthenics-rules": "^3.0",
         "phing/phing": "^2.16",
         "phpmd/phpmd": "^2.6",
         "vimeo/psalm": "^0.3.46",
-        "sebastian/phpcpd": "^3.0",
-        "atoum/reports-extension": "dev-master"
+        "sebastian/phpcpd": "^3.0"
     },
     "autoload": {
         "psr-4" : {

@@ -8,7 +8,6 @@
         <phingcall target="phpcpd" />
         <phingcall target="phplint" />
         <phingcall target="phpmd" />
-        <phingcall target="phpstan" />
         <phingcall target="psalm" />
         <phingcall target="test" />
     </target>
@@ -18,10 +17,6 @@
             command="./bin/phpcs --colors --standard='PSR2,vendor/object-calisthenics/phpcs-calisthenics-rules/src/ObjectCalisthenics/ruleset.xml' src/"
             passthru="true"
         />
-    </target>
-
-    <target name="phpstan">
-        <exec command="./bin/phpstan analyze --ansi --level 3 src/" passthru="true" />
     </target>
 
     <target name="psalm">

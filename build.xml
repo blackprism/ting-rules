@@ -5,11 +5,12 @@
 
     <target name="all">
         <phingcall target="phpcs" />
+        <phingcall target="phpcpd" />
         <phingcall target="phplint" />
         <phingcall target="phpmd" />
         <phingcall target="phpstan" />
         <phingcall target="psalm" />
-        <!--<phingcall target="test" />-->
+        <phingcall target="test" />
     </target>
 
     <target name="phpcs">
@@ -45,9 +46,28 @@
 
     <target name="phpcpd">
         <phpcpd>
-            <fileset dir="src/Blackprism/CouchbaseODM">
+            <fileset dir="src">
                 <include name="**/*.php" />
             </fileset>
         </phpcpd>
+    </target>
+
+    <target name="test">
+        <taskdef name="atoum" classpath="./vendor/atoum/atoum/resources/phing/" classname="AtoumTask"/>
+        <atoum
+                atoumpharpath="./bin/atoum"
+                bootstrap="./vendor/autoload.php"
+                codecoverage="true"
+                codecoveragereportextensionpath="./tests/coverage/"
+                codecoveragereportextensionurl="file://${fullpath}/tests/coverage/index.html"
+                showcodecoverage="true"
+                showmissingcodecoverage="true"
+                showprogress="true"
+                showmemory="true"
+                showduration="true">
+            <fileset dir="./tests/units">
+                <include name="**/*.php" />
+            </fileset>
+        </atoum>
     </target>
 </project>

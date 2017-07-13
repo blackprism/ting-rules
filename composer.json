@@ -12,14 +12,17 @@
         "aura/sqlquery": "^2.6"
     },
     "require-dev": {
-        "atoum/atoum": "^2.8",
+        "php": ">=7.0",
+        "ext-xdebug": "^2.2",
+        "atoum/atoum": "3.0",
         "atoum/stubs": "^2.2",
         "object-calisthenics/phpcs-calisthenics-rules": "^3.0",
         "phing/phing": "^2.16",
         "phpmd/phpmd": "^2.6",
         "phpstan/phpstan": "^0.7.0",
         "vimeo/psalm": "^0.3.46",
-        "sebastian/phpcpd": "^3.0"
+        "sebastian/phpcpd": "^3.0",
+        "atoum/reports-extension": "dev-master"
     },
     "autoload": {
         "psr-4" : {

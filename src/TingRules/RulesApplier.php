@@ -48,6 +48,14 @@ class RulesApplier
     }
 
     /**
+     * @return array<int, Rule>
+     */
+    public function getRules()
+    {
+        return $this->rules;
+    }
+
+    /**
      * @param Select   $queryBuilder
      * @param Metadata $metadata
      *
@@ -137,31 +145,19 @@ class RulesApplier
             return $hydrator;
         }
 
-        return $this->initHydratorAggregatorForNoAggregation(new HydratorAggregator());
-    }
-
-    /**
-     * @param HydratorAggregator $hydratorAggregator
-     *
-     * @return HydratorAggregator
-     */
-    private function initHydratorAggregatorForNoAggregation(HydratorAggregator $hydratorAggregator)
-    {
-        $hydratorAggregator->callableIdIs(
-            /** @return string */
-            function () {
-                return (string) mt_rand();
-            }
-        );
-
-        $hydratorAggregator->callableDataIs(
-            /** @return mixed */
-            function ($result) {
-                return $result;
-            }
-        );
-
-        return $hydratorAggregator;
+        return (new HydratorAggregator())
+            ->callableIdIs(
+                /** @return string */
+                function () {
+                    return (string) mt_rand();
+                }
+            )
+            ->callableDataIs(
+                /** @return mixed */
+                function ($result) {
+                    return $result;
+                }
+            );
     }
 
     /**
@@ -179,7 +175,6 @@ class RulesApplier
         /** @var Select $select */
         $select = $this->repository->getQueryBuilder(Repository::QUERY_SELECT);
         $select->from($metadata->getTable());
-
         $select = $this->applyQueryRule($select, $metadata);
 
         if ($select instanceof Select && $select->hasCols() === false) {

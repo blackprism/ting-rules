@@ -9,14 +9,19 @@
         <phingcall target="phplint" />
         <phingcall target="phpmd" />
         <phingcall target="psalm" />
+        <phingcall target="phpstan" />
         <phingcall target="test" />
     </target>
 
     <target name="phpcs">
         <exec
-            command="./bin/phpcs --colors --standard='PSR2,vendor/object-calisthenics/phpcs-calisthenics-rules/src/ObjectCalisthenics/ruleset.xml' src/"
+            command="./bin/phpcs --colors --standard='PSR2,vendor/object-calisthenics/phpcs-calisthenics-rules/src/ObjectCalisthenics/ruleset.xml,vendor/wimg/php-compatibility/PHPCompatibility/ruleset.xml' --runtime-set testVersion 5.5 src/"
             passthru="true"
         />
+    </target>
+
+    <target name="phpstan">
+        <exec command="./bin/phpstan analyze --ansi --level 3 src/" passthru="true" />
     </target>
 
     <target name="psalm">

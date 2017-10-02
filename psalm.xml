@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<psalm
+        name="Ting Rules : a tiny rules system to build query"
+        stopOnFirstError="false"
+        useDocblockTypes="true"
+        totallyTyped="true"
+>
+    <projectFiles>
+        <directory name="src" />
+    </projectFiles>
+
+    <issueHandlers>
+        <LessSpecificReturnType errorLevel="error" />
+
+        <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
+
+        <DeprecatedMethod errorLevel="error" />
+
+        <MissingClosureReturnType errorLevel="error" />
+        <MissingReturnType errorLevel="error" />
+        <MissingPropertyType errorLevel="error" />
+        <InvalidDocblock errorLevel="error" />
+        <MisplacedRequiredParam errorLevel="error" />
+
+        <PropertyNotSetInConstructor errorLevel="error" />
+        <MissingConstructor errorLevel="error" />
+
+        <!-- level 4 issues - points to possible deficiencies in logic, higher false-positives -->
+
+        <MoreSpecificReturnType errorLevel="error" />
+        <TypeCoercion errorLevel="error" />
+
+        <PossiblyNullArgument errorLevel="error" />
+        <PossiblyNullArrayAccess errorLevel="error" />
+        <PossiblyNullOperand errorLevel="error" />
+        <PossiblyNullPropertyAssignment errorLevel="error" />
+        <PossiblyNullPropertyFetch errorLevel="error" />
+        <PossiblyNullReference errorLevel="error" />
+        <PossiblyUndefinedVariable errorLevel="error" />
+        <PossiblyUnusedVariable errorLevel="error" />
+
+        <!-- level 5 issues - should be avoided at mosts costs... -->
+
+        <FailedTypeResolution errorLevel="error" />
+        <ForbiddenCode errorLevel="error" />
+        <ImplicitToStringCast errorLevel="error" />
+        <InvalidScalarArgument errorLevel="error" />
+        <InvalidToString errorLevel="error" />
+        <MethodSignatureMismatch errorLevel="error" />
+        <NoInterfaceProperties errorLevel="error" />
+        <TooManyArguments errorLevel="error" />
+        <TypeDoesNotContainType errorLevel="error" />
+    </issueHandlers>
+</psalm>
